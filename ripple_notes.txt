@@ -1,0 +1,85 @@
+Ripple 0.1
+	Document
+		find(*$key)
+		bucket()
+		bucket_name($name?)
+			- default to model_name.plural
+		first()?
+		all()
+		destroy_all()
+		isNew()
+		update($params)
+		save()
+		reload()
+		destroy()
+		isEmbeddable()
+Ripple 0.2
+	Document
+		validate()
+	Generator
+		Model
+Ripple 0.3
+	Document
+		add_observer()
+		count_observers()
+		observers()
+		notify_observers()
+	Observer
+		before/after
+			save()
+			create()
+			destroy()
+			update()
+==================================
+
+Bucket name defaults to model_name.plural
+Ignore errors for now.
+Ripple calls properties Attributes?
+	Ripple::Properties
+	Ripple::Persistence.update_attribute
+	`attribute` is what ActiveRecord calls a property?
+Freezing appears to do nothing?
+Defer i18n support until we integrate with a framework that suports it.	
+Observer pattern is going to be huge but may be a 0.2 feature.
+
+======
+
+Ripple adds values to objects (_type, key)
+Ripple-php will not
+
+Ripple implements key_on for automatic key generation
+Ripple-php will use key templates ("{username}-{id}")
+
+Ripple implements update_attribute($a, $v) and update_attributes($array)
+Ripple-php relegates this to the bucket through bucket->setProperty($k, $v)
+
+Ripple allows settings for property through the Property class.
+Ripple-php will use json-schema
+
+Ripple uses attribute methods to modify properties.
+Ripple-php will use a bare object at first, possibly magic __get/set if req'd
+	Q: Are we missing out on some sexy query syntax?
+	A: I don't think so.
+		Bypass until a use case is found.
+
+Ripple uses properties for validation rules and ActiveModel validation
+Ripple-php will test object against rules in json-schema
+	Q: How to handle custom validation like linked resource exists?
+	A: Don't know yet.
+		Bypass until a use case is found.
+	
+Ripple has Association classes for one-to-many, many-to-many, embedded, etc
+Ripple-php may not require this jazz. 
+	Q: Do we need to implement these classes or are they just relics from RDBMS?
+	A: Link walking is fundamentally different. Content-Type may be a more powerful superset.
+		Bypass until a use case is found.
+
+Ripple uses application/json and maps Documents to buckets.
+Ripple-php will use Content-Type, allowing for heterogeneous buckets.
+
+Ripple uses nested attributes.
+Ripple-php probably doesn't need to.
+	Q: Do I really need to learn what nested attributes are?
+	A: They look pretty complicated.
+		Bypass until a use case is found.
+	
