@@ -4,29 +4,29 @@ require_once('config.php');
 
 ksort($testsets);
 
+if(isset($_GET['show_source'])) {
+	$show_source = $_GET['show_source'];
+	setcookie('show_source', $show_source);
+} else {
+	$show_source = isset($_COOKIE['show_source']) ? $_COOKIE['show_source'] : false;
+}
+$toggle_source = http_build_query(array_merge($_GET, array('show_source' => !$show_source)));
+
 ?><!doctype html>
 <head>
   <title>Ripple Test</title>
 </head>
 <h1><a href="?">Ripple Test</a></h1>
 <ul class="nav">
-	<? foreach($testsets as $func => $title) { 
+	<? foreach($testsets as $func => $title) {
+		$q = http_build_query(array('test' => $func));
 		$attr_act = isset($_GET['test']) && $func == $_GET['test'] ? ' class="active"' : null;
 	?>
-	<li<?=$attr_act?>><a href="?test=<?=$func?>"><?=ucwords($func)?></a></li>
+	<li<?=$attr_act?>><a href="?<?=$q?>"><?=ucwords($func)?></a></li>
 	<? } ?>
+	<li class="toggle_all_source"><a href="?<?=$toggle_source?>">Toggle source</a></li>
 </ul>
 <div style="clear: both;"></div>
-<style>
-h1 { margin-top: 0; }
-a {outline: 0;}
-pre { background: #ddd; padding: 20px; margin: 0;}
-ul.nav { float: left; margin: 0; padding: 0;}
-ul.nav li { float: left; list-style: none; }
-ul.nav li a { float: left; line-height: 30px; padding: 0 10px; text-decoration: none; color: #666; font-weight: bold; font-family: arial; }
-ul.nav li a:hover { background: #eee;  color: #000; }
-ul.nav li.active a { background: #ddd; color: #000; }
-</style>
 <?
 if(!\Ripple::client()->isAlive()) {
 	echo "<div class='conn-error'>Connection failed on 127.0.0.1:8098</div>";
@@ -59,7 +59,8 @@ if(!\Ripple::client()->isAlive()) {
 				}
 				$time = round((microtime(true) - $func_timer_start)*1000, 3);
 				echo "($time ms) \n\n";
-				echo "<div class='source' id='{$id}'>\n{$code}\n\n</div>\n";
+				$d = $show_source ? 'block' : 'none';
+				echo "<div class='source' style='display: {$d}'id='{$id}'>\n{$code}\n\n</div>";
 			}
 		}
 		$timer_end = microtime(true);
@@ -70,10 +71,21 @@ if(!\Ripple::client()->isAlive()) {
 		echo "Chooose a test from the list above.</pre>";
 	}
 }
+
 ?>
 <style>
+h1 { margin-top: 0; }
+a {outline: 0;}
+pre { background: #ddd; padding: 20px; margin: 0;}
+ul.nav { float: left; margin: 0; padding: 0;}
+ul.nav li { float: left; list-style: none; }
+ul.nav li a { float: left; line-height: 30px; padding: 0 10px; text-decoration: none; color: #666; font-weight: bold; font-family: arial; }
+ul.nav li a:hover { background: #eee;  color: #000; }
+ul.nav li.active a { background: #ddd; color: #000; }
+ul.nav li.toggle_all_source a { margin-left: 20px; font-size: 11px; }
 .conn-error { background: #a00; color: #fff; padding: 60px 0; font-size: 30px; text-align: center; font-family: sans-serif; }
-.source { background: #fff; padding: 0; border: 2px solid #ccc; }
+.source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; margin-bottom: 1em; }
+.toggle_source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; }
 </style>
 <script>
 function showSource(id) {
