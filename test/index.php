@@ -16,6 +16,7 @@ $toggle_source = http_build_query(array_merge($_GET, array('show_source' => !$sh
 <head>
   <title>ripple-php</title>
   <style>
+	body { margin: 0; }
 	h1 { line-height: 1em; font-size: 24px; margin: 0; margin-bottom: 10px; width: 100%; float: left; background: #000; }
 	h1 a { color: #fff; text-decoration: none; font-family: arial; font-weight: normal; padding: 10px 10px; float: left; }
 	h1 a:hover { text-decoration: underline; }
@@ -34,9 +35,17 @@ $toggle_source = http_build_query(array_merge($_GET, array('show_source' => !$sh
 	.fail { background: #a00; color: #fff; padding: 0 4px 0 3px; }
 	.choose { font-size: 16px; padding: 40px; color: #666; }
 	.choose ul li { padding: 5px 0; list-style: none; }
+	.main { padding: 0 10px; }
   </style>
+<script>
+function showSource(id) {
+	var el = document.getElementById(id);
+	el.style.display = el.style.display == 'none' ? 'block' : 'none';
+}
+</script>
 </head>
 <h1><a href="?">ripple-php</a></h1>
+<div class="main">
 <ul class="nav">
 	<? foreach($testsets as $func => $title) {
 		$q = http_build_query(array('test' => $func));
@@ -103,12 +112,6 @@ if(!\Ripple::client()->isAlive()) {
 	}
 }
 
-?>
-<script>
-function showSource(id) {
-	var el = document.getElementById(id);
-	el.style.display = el.style.display == 'none' ? 'block' : 'none';
-}
-</script>
+?></div>
 </body>
 </html>
