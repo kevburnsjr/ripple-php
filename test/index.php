@@ -15,6 +15,26 @@ $toggle_source = http_build_query(array_merge($_GET, array('show_source' => !$sh
 ?><!doctype html>
 <head>
   <title>ripple-php</title>
+  <style>
+	h1 { line-height: 1em; font-size: 24px; margin: 0; margin-bottom: 10px; width: 100%; float: left; background: #000; }
+	h1 a { color: #fff; text-decoration: none; font-family: arial; font-weight: normal; padding: 10px 10px; float: left; }
+	h1 a:hover { text-decoration: underline; }
+	a {outline: 0;}
+	pre { background: #ddd; padding: 20px; margin: 0;}
+	ul.nav { float: left; margin: 0; padding: 0; clear: left; }
+	ul.nav li { float: left; list-style: none; }
+	ul.nav li a { float: left; line-height: 30px; padding: 0 10px; text-decoration: none; color: #666; font-weight: bold; font-family: arial; }
+	ul.nav li a:hover { background: #eee;  color: #000; }
+	ul.nav li.active a { background: #ddd; color: #000; }
+	ul.nav li.toggle_all_source a { margin-left: 20px; font-size: 11px; }
+	.conn-error { background: #a00; color: #fff; padding: 60px 0; font-size: 30px; text-align: center; font-family: sans-serif; }
+	.source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; margin-bottom: 1em; }
+	.toggle_source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; }
+	.pass { background: #080; color: #fff; padding: 0 4px 0 3px; }
+	.fail { background: #a00; color: #fff; padding: 0 4px 0 3px; }
+	.choose { font-size: 16px; padding: 40px; color: #666; }
+	.choose ul li { padding: 5px 0; list-style: none; }
+  </style>
 </head>
 <h1><a href="?">ripple-php</a></h1>
 <ul class="nav">
@@ -84,26 +104,6 @@ if(!\Ripple::client()->isAlive()) {
 }
 
 ?>
-<style>
-h1 { line-height: 1em; font-size: 24px; margin: 0; }
-h1 a { color: #000; text-decoration: none; font-family: arial; font-weight: normal; padding: 10px 10px; float: left; }
-h1 a:hover { text-decoration: underline; }
-a {outline: 0;}
-pre { background: #ddd; padding: 20px; margin: 0;}
-ul.nav { float: left; margin: 0; padding: 0; clear: left; }
-ul.nav li { float: left; list-style: none; }
-ul.nav li a { float: left; line-height: 30px; padding: 0 10px; text-decoration: none; color: #666; font-weight: bold; font-family: arial; }
-ul.nav li a:hover { background: #eee;  color: #000; }
-ul.nav li.active a { background: #ddd; color: #000; }
-ul.nav li.toggle_all_source a { margin-left: 20px; font-size: 11px; }
-.conn-error { background: #a00; color: #fff; padding: 60px 0; font-size: 30px; text-align: center; font-family: sans-serif; }
-.source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; margin-bottom: 1em; }
-.toggle_source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; }
-.pass { background: #080; color: #fff; padding: 0 4px 0 3px; }
-.fail { background: #a00; color: #fff; padding: 0 4px 0 3px; }
-.choose { font-size: 16px; padding: 40px; color: #666; }
-.choose ul li { padding: 5px 0; list-style: none; }
-</style>
 <script>
 function showSource(id) {
 	var el = document.getElementById(id);

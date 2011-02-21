@@ -1,3 +1,6 @@
+Ripple 0.1
+	Document
+		traverse()
 Ripple 0.2
 	Document
 		isEmbeddable()

@@ -50,12 +50,12 @@ class Document extends \Ripple {
 	}
 	
 	// TODO:: make filtering chainable with limiting and other niceties.
- 	public static function filter($filter) {
+ 	public static function key_filter($key_filter) {
 		$collection = new static::$_collection_class();
 		$mapred = new \RiakMapReduce(parent::client());
 		$mapred->inputs = array(
 			'bucket' => static::$_bucket_name,
-			'key_filters' => array($filter)
+			'key_filters' => array($key_filter)
 		);
 		$links = $mapred->run();
 		foreach($links as $link) {
@@ -64,19 +64,6 @@ class Document extends \Ripple {
 		}
 		return $collection;
 	}
-	
-/*	ALTERNATE FILTERING SYNTAX
-	public static function filter($filter) {
-		$collection = new static::$_collection_class();
-		$mapred = parent::client()->filter(static::bucket_name(), $filter);
-		$links = $mapred->run();
-		foreach($links as $link) {
-			$r = $link->get();
-			$collection->push(static::from($r));
-		}
-		return $collection;
-	}
-*/
 
 	public static function bucket_name() {
 		if(isset(static::$_bucket_name)) {
