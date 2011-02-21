@@ -28,7 +28,9 @@ ul.nav li a:hover { background: #eee;  color: #000; }
 ul.nav li.active a { background: #ddd; color: #000; }
 </style>
 <?
-if(!isset($_GET['test'])) {
+if(!\Ripple::client()->isAlive()) {
+	echo "<div class='conn-error'>Connection failed on 127.0.0.1:8098</div>";
+} else if(!isset($_GET['test'])) {
 	echo "<pre>Chooose a test set from the list above.</pre>";
 } else {
 	$test_name = $_GET['test'];
@@ -70,6 +72,7 @@ if(!isset($_GET['test'])) {
 }
 ?>
 <style>
+.conn-error { background: #a00; color: #fff; padding: 60px 0; font-size: 30px; text-align: center; font-family: sans-serif; }
 .source { background: #fff; padding: 0; border: 2px solid #ccc; }
 </style>
 <script>
