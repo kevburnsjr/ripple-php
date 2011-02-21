@@ -14,9 +14,9 @@ $toggle_source = http_build_query(array_merge($_GET, array('show_source' => !$sh
 
 ?><!doctype html>
 <head>
-  <title>Ripple Test</title>
+  <title>ripple-php</title>
 </head>
-<h1><a href="?">Ripple Test</a></h1>
+<h1><a href="?">ripple-php</a></h1>
 <ul class="nav">
 	<? foreach($testsets as $func => $title) {
 		$q = http_build_query(array('test' => $func));
@@ -34,6 +34,7 @@ if(!\Ripple::client()->isAlive()) {
 	echo "<pre>Chooose a test set from the list above.</pre>";
 } else {
 	$test_name = $_GET['test'];
+	$total = $total_passed = 0;
 	if(isset($testsets[$test_name])) {
 		$testset = $testsets[$test_name];
 		echo "<pre>----------- -= ".ucwords($test_name)." =- ------------\n\n";
@@ -52,11 +53,13 @@ if(!\Ripple::client()->isAlive()) {
 					$error = $e;
 				}
 				if($passed) {
-					echo " Passed. ";
+					$total_passed++;
+					echo " <span class='pass'>Passed</span> ";
 				} else {
-					echo " FAILED\n";
+					echo " <span class='fail'>Failed</span> ";
 					print_r($error);
 				}
+				$total++;
 				$time = round((microtime(true) - $func_timer_start)*1000, 3);
 				echo "($time ms) \n\n";
 				$d = $show_source ? 'block' : 'none';
@@ -64,20 +67,23 @@ if(!\Ripple::client()->isAlive()) {
 			}
 		}
 		$timer_end = microtime(true);
-		echo "- Total: " . round(($timer_end - $timer_start)*1000, 3);
-		echo " ms\n\n<pre>";
+		echo "- Total Time: " . round(($timer_end - $timer_start)*1000, 3)." ms\n";
+		echo "- Total Passed: {$total_passed}/{$total}\n";
+		echo "</pre>";
 	} else {
-		echo "<pre>Could not find test $test_name\n";
+		echo "<pre class='conn-error'>Could not find test `".htmlentities($test_name)."`\n";
 		echo "Chooose a test from the list above.</pre>";
 	}
 }
 
 ?>
 <style>
-h1 { margin-top: 0; }
+h1 { line-height: 1em; font-size: 24px; margin: 0; }
+h1 a { color: #000; text-decoration: none; font-family: arial; font-weight: normal; padding: 10px 10px; float: left; }
+h1 a:hover { text-decoration: underline; }
 a {outline: 0;}
 pre { background: #ddd; padding: 20px; margin: 0;}
-ul.nav { float: left; margin: 0; padding: 0;}
+ul.nav { float: left; margin: 0; padding: 0; clear: left; }
 ul.nav li { float: left; list-style: none; }
 ul.nav li a { float: left; line-height: 30px; padding: 0 10px; text-decoration: none; color: #666; font-weight: bold; font-family: arial; }
 ul.nav li a:hover { background: #eee;  color: #000; }
@@ -86,6 +92,8 @@ ul.nav li.toggle_all_source a { margin-left: 20px; font-size: 11px; }
 .conn-error { background: #a00; color: #fff; padding: 60px 0; font-size: 30px; text-align: center; font-family: sans-serif; }
 .source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; margin-bottom: 1em; }
 .toggle_source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; }
+.pass { background: #080; color: #fff; padding: 0 4px 0 3px; }
+.fail { background: #a00; color: #fff; padding: 0 4px 0 3px; }
 </style>
 <script>
 function showSource(id) {
