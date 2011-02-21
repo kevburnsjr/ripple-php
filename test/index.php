@@ -31,7 +31,14 @@ $toggle_source = http_build_query(array_merge($_GET, array('show_source' => !$sh
 if(!\Ripple::client()->isAlive()) {
 	echo "<div class='conn-error'>Connection failed on 127.0.0.1:8098</div>";
 } else if(!isset($_GET['test'])) {
-	echo "<pre>Chooose a test set from the list above.</pre>";
+	echo "<pre class='choose'>ripple-php is an ODM for Riak inspired by Ripple.\n";
+	echo "<ul>";
+	foreach($testsets as $func => $title) {
+		$q = http_build_query(array('test' => $func));
+		echo "<li>Test <a href='?{$q}'>".ucwords($func)."</a></li>";
+	}
+	echo "</ul></pre>";
+	
 } else {
 	$test_name = $_GET['test'];
 	$total = $total_passed = 0;
@@ -94,6 +101,8 @@ ul.nav li.toggle_all_source a { margin-left: 20px; font-size: 11px; }
 .toggle_source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; }
 .pass { background: #080; color: #fff; padding: 0 4px 0 3px; }
 .fail { background: #a00; color: #fff; padding: 0 4px 0 3px; }
+.choose { font-size: 16px; padding: 40px; color: #666; }
+.choose ul li { padding: 5px 0; list-style: none; }
 </style>
 <script>
 function showSource(id) {
