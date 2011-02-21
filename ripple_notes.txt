@@ -1,20 +1,6 @@
-Ripple 0.1
-	Document
-		find(*$key)
-		bucket()
-		bucket_name($name?)
-			- default to model_name.plural
-		first()?
-		all()
-		destroy_all()
-		isNew()
-		update($params)
-		save()
-		reload()
-		destroy()
-		isEmbeddable()
 Ripple 0.2
 	Document
+		isEmbeddable()
 		validate()
 	Generator
 		Model

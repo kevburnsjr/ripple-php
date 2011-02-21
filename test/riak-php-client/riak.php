@@ -207,6 +207,16 @@ class RiakClient {
     $args = func_get_args();
     return call_user_func_array(array(&$mr, "reduce"), $args);
   }
+
+  /**
+   * Start assembling a Map/Reduce operation.
+   * @see RiakMapReduce::filter()
+   */
+  function filter($params) {
+    $mr = new RiakMapReduce($this);
+    $args = func_get_args();
+    return call_user_func_array(array(&$mr, "filter"), $args);
+  }
 }
 
 
@@ -344,6 +354,20 @@ class RiakMapReduce {
   }
 
   /**
+   * Add a filter phase to the map/reduce operation.
+   * @param string $bucket - Bucket name (default '_' means all buckets)
+   * @param array $filter - Filter ex: array("ends_with", "0603")
+   * @return $this
+   */
+  function filter($bucket='_', $filter=array()) {
+    $this->inputs = array(
+		'bucket' => $bucket,
+		'key_filters' => array($filter)
+	);
+    return $this;
+  }
+
+  /**
    * Run the map/reduce operation. Returns an array of results, or an
    * array of RiakLink objects if the last phase is a link phase. 
    * @param integer $timeout - Timeout in seconds.
@@ -385,14 +409,15 @@ class RiakMapReduce {
     # If the last phase is NOT a link phase, then return the result.
     $linkResultsFlag |= (end($this->phases) instanceof RiakLinkPhase);
 
-    # If we don't need to link results, then just return.
     if (!$linkResultsFlag) return $result;
+    # If we don't need to link results, then just return.
 
     # Otherwise, if the last phase IS a link phase, then convert the
     # results to RiakLink objects.
     $a = array();
     foreach ($result as $r) {
-      $link = new RiakLink($r[0], $r[1], $r[2]);
+      $tag = isset($r[2]) ? $r[2] : null;
+      $link = new RiakLink($r[0], $r[1], $tag);
       $link->client = $this->client;
       $a[] = $link;
     }
@@ -1073,10 +1098,12 @@ class RiakObject {
     } else {
       $content = $this->getData();
     }
+  
+    $method = $this->key ? 'PUT' : 'POST';
 
     # Run the operation.
-    $response = RiakUtils::httpRequest('PUT', $url, $headers, $content);
-    $this->populate($response, array(200, 300));
+    $response = RiakUtils::httpRequest($method, $url, $headers, $content);
+    $this->populate($response, array(200, 201, 300));
     return $this;
   }
  
@@ -1118,7 +1145,7 @@ class RiakObject {
     # Construct the URL...
     $params = array('dw' => $dw);
     $url = RiakUtils::buildRestPath($this->client, $this->bucket, $this->key, NULL, $params);
-
+	
     # Run the operation...
     $response = RiakUtils::httpRequest('DELETE', $url);    
     $this->populate($response, array(204, 404));
@@ -1206,9 +1233,14 @@ class RiakObject {
       $this->exists = TRUE;
       return $this;
     }
+  
+    if ($status == 201) {
+      $path_parts = explode('/', $this->headers['location']);
+      $this->key = array_pop($path_parts);
+    }
 
     # Possibly json_decode...
-    if ($status == 200 && $this->jsonize) {
+    if (($status == 200 || $status == 201) && $this->jsonize) {
       $this->data = json_decode($this->data, true);
     }
 
