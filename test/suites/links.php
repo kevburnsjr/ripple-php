@@ -12,8 +12,9 @@ $testsets['links'] = array(
 	},
 
 	"Link to Document" => function($fxs) {
+		$address = new Address('dave_home', $fxs->address1);
+		$address->save();
 		$client = new Client('dave_link_to_address', $fxs->client1);
-		$address = new Address('dave_linked_to_address', $fxs->address1);
 		$client->addLink($address, 'address');
 		return $client->save();
 	},
