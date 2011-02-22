@@ -31,11 +31,11 @@ $toggle_source = http_build_query(array_merge($_GET, array('show_source' => !$sh
 	.conn-error { background: #a00; color: #fff; padding: 60px 0; font-size: 30px; text-align: center; font-family: sans-serif; }
 	.source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; margin-bottom: 1em; }
 	.toggle_source { display: none; background: #fff; padding: 0; border: 2px solid #ccc; }
-	.pass { background: #080; color: #fff; padding: 0 4px 0 3px; }
-	.fail { background: #a00; color: #fff; padding: 0 4px 0 3px; }
+	.pass { background: #080; color: #fff; padding: 0 4px 0 3px; text-decoration: none; }
+	.fail { background: #a00; color: #fff; padding: 0 4px 0 3px; text-decoration: none; }
 	.choose { font-size: 16px; padding: 40px; color: #666; }
 	.choose ul li { padding: 5px 0; list-style: none; }
-	.main { padding: 0 10px; }
+	.main { padding: 0 10px 10px; }
   </style>
 <script>
 function showSource(id) {
@@ -77,8 +77,12 @@ if(!\Ripple::client()->isAlive()) {
 		$timer_start = microtime(true);
 		foreach($testset as $name => $test) {
 			if($test instanceof \Closure) {
-				$code = \Ripple\Test\fetchCode($test);
 				$id = md5($name);
+				if(isset($_GET['id']) && $id != $_GET['id']) {
+					continue;
+				}
+				$code = \Ripple\Test\fetchCode($test);
+				$url = http_build_query(array('test' => $test_name, 'id' => $id));
 				echo "<a href='javascript:showSource(\"{$id}\")'>{$name}</a> ...";
 				$func_timer_start = microtime(true);
 				$error = null;
@@ -90,9 +94,9 @@ if(!\Ripple::client()->isAlive()) {
 				}
 				if($passed) {
 					$total_passed++;
-					echo " <span class='pass'>Passed</span> ";
+					echo " <a class='pass' href='?{$url}'>Passed</a> ";
 				} else {
-					echo " <span class='fail'>Failed</span> ";
+					echo " <a class='fail' href='?{$url}'>Failed</a> ";
 					print_r($error);
 				}
 				$total++;

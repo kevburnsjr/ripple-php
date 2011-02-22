@@ -37,7 +37,7 @@ while(false !== ( $file = readdir($fixtures_dir))) {
 		$frags = explode('.',$file);
 		if(count($frags) == 3) {	
 			$class_name = '\Ripple\Test\Model\\'.$frags[1];
-			$fixtures->$frags[0] = new $class_name(file_get_contents($path));
+			$fixtures->$frags[0] = json_decode(file_get_contents($path));
 		} else {
 			$fixtures->$file = json_decode(file_get_contents($path));
 		}

@@ -1,9 +1,9 @@
 <?php
 
-namespace Ripple\Test\Model;
+namespace Ripple\Test;
 
 class Address extends \Ripple\Document {
 	
-	protected static $_bucket_name = "ripple_test_addresses";
+	protected static $_bucket_name = 'ripple_test_addresses';
 	
 }

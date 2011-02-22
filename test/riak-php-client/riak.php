@@ -375,6 +375,7 @@ class RiakMapReduce {
    */
   function run($timeout=NULL) {
     $num_phases = count($this->phases);
+	$linkResultsFlag = null;
 
     # If there are no phases, then just echo the inputs back to the user.
     if ($num_phases == 0) {
@@ -399,7 +400,7 @@ class RiakMapReduce {
     # Construct the job, optionally set the timeout...
     $job = array("inputs"=>$this->inputs, "query"=>$query);
     if ($timeout != NULL) $job["timeout"] = $timeout;
-    $content = json_encode($job);    
+    $content = json_encode($job);
 
     # Do the request...
     $url = "http://" . $this->client->host . ":" . $this->client->port . "/" . $this->client->mapred_prefix;

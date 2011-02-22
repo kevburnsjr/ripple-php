@@ -33,7 +33,7 @@ require_once('Ripple/Document.class.php');
 class Ripple {
 	
 	private $config;
-	private $client;
+	protected static $client;
 	
 	/**
 	 * Construct a new Ripple object
@@ -49,14 +49,12 @@ class Ripple {
 	 * @return RiakClient
 	 */
 	public static function client($client = null) {
-		/* if($client instanceOf RiakClient) {
-			$this->client = $client;
-		} else if(!$this->client instanceOf RiakClient) {
-			// TODO : Add config to client instantiation
-			$this->client = new RiakClient();
+		if($client) {
+			static::$client = $client;
+		} else if(!static::$client) {
+			static::$client = new RiakClient();
 		}
-		return $this->client; */
-		return new RiakClient();
+		return static::$client;
 	}
 
 	/**

@@ -7,23 +7,41 @@ class Collection implements \ArrayAccess, \Countable {
 	private $documents = array();
 	private $hydrated = false;
 	
-	public static function rand($limit = 1) {
-		return array_rand($this->documents, $limit);
+	/**
+	 * Get some random members of this collection
+	 * @param string $limit - Number of members to return
+	 * @return mixed - Returns Document or Document Collection
+	 */
+	public function rand($limit = 1) {
+		$docs = array_rand($this->documents, $limit);
+		if(is_array($collection)) {
+			$collection = new static();
+			return $collection->push($docs);
+		} else {
+			return $docs;
+		}
 	}
 	
-	public function push($document) {
-		if($document instanceof \Ripple\Document) {
-			$this->documents[$document->key()] = $document;
-		} else if(is_array($document)) {
-			foreach($document as $d) {
+	/**
+	 * Push some documents into the collection
+	 * @param mixed $documents - Document or array of Documents
+	 * @return \Ripple\Document\Collection - Return self
+	 */
+	public function push($documents) {
+		if($documents instanceof \Ripple\Document) {
+			$this->documents[$documents->key()] = $documents;
+		} else if(is_array($documents)) {
+			foreach($documents as $d) {
 				$this->push($d);
 			}
 		}
 		return $this;
 	}
 	
-	// TODO: optimize this to save multiple in single request?
-	// Does Riak even support bulk requests?
+	/**
+	 * Save all documents in this collection
+	 * @return \Ripple\Document\Collection - Return self
+	 */
 	public function save() {
 		foreach($this->documents as $doc) {
 			$doc->save();
@@ -31,8 +49,10 @@ class Collection implements \ArrayAccess, \Countable {
 		return $this;
 	}
 	
-	// TODO: optimize this to delete multiple in single request?
-	// Does Riak even support bulk requests?
+	/**
+	 * Save all documents in this collection
+	 * @return \Ripple\Document\Collection - Return self
+	 */
 	public function delete() {
 		foreach($this->documents as $doc) {
 			$doc->delete();

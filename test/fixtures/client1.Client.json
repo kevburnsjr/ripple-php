@@ -1,16 +1,8 @@
 { 
-	"billingContactEmail" : "",
-	"tstamp" : "2009-09-24 21:39:41.0",
-	"companyName" : "test2",
-	"addressId" : 0,
-	"clientIdApproverWeb" : 0,
-	"id" : 0,
-	"clientIdAdmin1" : 0,
-	"clientIdAdmin2" : 0,
-	"billingContactName" : "",
-	"billingContactAddressId" : 0,
-	"name" : "null",
-	"clientIdApproverPhone" : 0,
-	"clientIdApproverPOS" : 0,
-	"billingContactPhone" : "null"
+	"email" : "dave@bananza.com",
+	"companyName" : "Bananza Haberdashers",
+	"name" : "Dave",
+	"phone" : "650-555-1212",
+	"created" : "2011-02-21T18:33:54-08:00",
+	"updated" : "2011-02-21T18:33:54-08:00"
 }
