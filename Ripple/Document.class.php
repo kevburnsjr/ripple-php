@@ -107,20 +107,6 @@ class Document {
 // Protected static methods
 	
 	/**
-	 * Get/set Bucket
-	 * @param \RiakBucket $bucket - Map function
-	 * @return \\RiakBucket
-	 */
-	protected static function _bucket($bucket = null) {
-		if($bucket) {
-			return static::$_bucket = $bucket;
-		} else if(!isset(static::$_bucket)) {
-			static::$_bucket = static::client()->bucket(static::bucket_name());
-		}
-		return static::$_bucket;
-	}
-	
-	/**
 	 * Get/set Client
 	 * @param \RiakClient $client - Map function
 	 * @return \\RiakClient
@@ -142,7 +128,7 @@ class Document {
 		if(isset(static::$_bucket_name)) {
 			return static::$_bucket_name;
 		} else {
-			$class_parts = explode('\\', strtolower(get_class($this)));
+			$class_parts = explode('\\', strtolower(get_class(new static())));
 			static::$_bucket_name = array_pop($class_parts);
 		}
 		return static::$_bucket_name;
@@ -170,7 +156,7 @@ class Document {
 	 * @return \\RiakBucket
 	 */
 	public function bucket() {
-		return static::_bucket();
+		return static::client()->bucket(static::bucket_name());
 	}
 	
 	/**

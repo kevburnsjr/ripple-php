@@ -19,7 +19,8 @@ $testsets['collection'] = array(
 		$addresses->push(Address::create($k1, $fxs->address1));
 		$addresses->push(Address::create($k2, $fxs->address1));
 		$addresses->save();
-		return Address::find($k1)->exists() && Address::find($k2)->exists();
+		return Address::find($k1)->exists() 
+			&& Address::find($k2)->exists();
 	},
 
 	"Delete" => function($fxs) {
@@ -29,7 +30,8 @@ $testsets['collection'] = array(
 		$addresses->push(Address::create($k1, $fxs->address1));
 		$addresses->push(Address::create($k2, $fxs->address1));
 		$addresses->save()->delete();
-		return !Address::find($k1)->exists() && !Address::find($k2)->exists();
+		return !Address::find($k1)->exists() 
+			&& !Address::find($k2)->exists();
 	},
 	
 );

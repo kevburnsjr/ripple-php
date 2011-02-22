@@ -4,6 +4,15 @@ namespace Ripple\Test;
 
 $testsets['document'] = array(
 
+	"Bucket Names" => function($fxs) {
+		$address = new Address('home');
+		$client = new Client('ibm');
+		$user = new User('dave');
+		return $client->bucket()->name == "ripple_test_clients"
+			&& $address->bucket()->name == "ripple_test_addresses"
+			&& $user->bucket()->name == "user";
+	},
+	
 	"Save" => function($fxs) {
 		$address = new Address('home');
 		$address->state = "California";
@@ -21,7 +30,8 @@ $testsets['document'] = array(
 			->set('city', "San Francisco")
 			->save();
 		$address = Address::find('home');
-		return isset($address->city) && $address->city == "San Francisco";
+		return isset($address->city) 
+			&& $address->city == "San Francisco";
 	},
 
 	"Clear" => function($fxs) {
@@ -45,7 +55,8 @@ $testsets['document'] = array(
 	"Move To" => function($fxs) {
 		$address = Address::find('home')
 			->moveTo('home2');
-		return !Address::find('home')->exists() && Address::find('home2')->exists();
+		return !Address::find('home')->exists() 
+			&& Address::find('home2')->exists();
 	},
 
 	"Delete" => function($fxs) {
