@@ -33,10 +33,10 @@ class Document {
 	
 	/**
 	 * Convenience method for instantiation
-     * @see __construct()
+	 * @see __construct()
 	 * @param string $key - Key for this object
 	 * @param mixed $props - Key for this object
-	 * @return \Ripple\Document
+	 * @return \\Ripple\\Document
 	 */
 	public static function create($key = null, $props = array()) {
 		return new static($key, $props);
@@ -45,7 +45,7 @@ class Document {
 	/**
 	 * Find by Key
 	 * @param string $key - Key to find
-	 * @return \Ripple\Document - Returns Document or null
+	 * @return \\Ripple\\Document - Returns Document or null
 	 */
 	public static function find($key) {
 		$bucket = static::client()->bucket(static::bucket_name());
@@ -57,7 +57,7 @@ class Document {
 	
 	/**
 	 * Find all objects
-	 * @return \Ripple\Document\Collection 
+	 * @return \\Ripple\\Document\Collection 
 	 */
 	public static function all() {
 		$collection = new static::$_collection_class();
@@ -77,7 +77,7 @@ class Document {
 	 * Find all objects with keys that match the filter
 	 * More Info: http://wiki.basho.com/Key-Filters.html
 	 * @param array $key_filter - Key Filter ex: array("ends_with", "0603")
-	 * @return \Ripple\Document\Collection 
+	 * @return \\Ripple\\Document\Collection 
 	 */
  	public static function key_filter($key_filter) {
 		$collection = new static::$_collection_class();
@@ -97,7 +97,7 @@ class Document {
 	/**
 	 * Get a map reduce object over this bucket
 	 * More Info: http://wiki.basho.com/MapReduce.html
-	 * @return \RiakMapReduce
+	 * @return \\RiakMapReduce
 	 */
  	public static function mapReduce() {
 		$mapred = new \RiakMapReduce(static::client());
@@ -109,7 +109,7 @@ class Document {
 	/**
 	 * Get/set Bucket
 	 * @param \RiakBucket $bucket - Map function
-	 * @return \RiakBucket
+	 * @return \\RiakBucket
 	 */
 	protected static function _bucket($bucket = null) {
 		if($bucket) {
@@ -123,7 +123,7 @@ class Document {
 	/**
 	 * Get/set Client
 	 * @param \RiakClient $client - Map function
-	 * @return \RiakClient
+	 * @return \\RiakClient
 	 */
 	protected static function client($client = null) {
 		if($client) {
@@ -151,7 +151,7 @@ class Document {
 	/**
 	 * Instantiates Document from Riak transaction response
 	 * @param \RiakObject $r - Response with key and data to be copied
-	 * @return \Ripple\Document - Returns new Document
+	 * @return \\Ripple\\Document - Returns new Document
 	 */
 	protected static function from($r) {
 		if($r instanceof \RiakObject) {
@@ -167,7 +167,7 @@ class Document {
 	
 	/**
 	 * Get Bucket
-	 * @return \RiakBucket
+	 * @return \\RiakBucket
 	 */
 	public function bucket() {
 		return static::_bucket();
@@ -192,7 +192,7 @@ class Document {
 	/**
 	 * Sets key for this document
 	 * @param string $key
-	 * @return \Ripple\Document - Returns self
+	 * @return \\Ripple\\Document - Returns self
 	 */
 	public function setKey($key = null) {
 		$this->_key = $key;
@@ -201,7 +201,7 @@ class Document {
 	
 	/**
 	 * Saves this document to the bucket
-	 * @return \Ripple\Document - Returns self or null
+	 * @return \\Ripple\\Document - Returns self or null
 	 */
 	public function save() {
 		$bucket = $this->bucket();
@@ -222,7 +222,7 @@ class Document {
 	/**
 	 * Updates properties of this document with members of supplied array
 	 * @param mixed $props - Array or object containing properties to be copied 
-	 * @return \Ripple\Document - Returns self
+	 * @return \\Ripple\\Document - Returns self
 	 */
 	public function update($props) {
 		$props = is_object($props) ? (array)$props : $props;
@@ -236,7 +236,7 @@ class Document {
 	
 	/**
 	 * Deletes this document from the bucket
-	 * @return \Ripple\Document - Returns self or null
+	 * @return \\Ripple\\Document - Returns self or null
 	 */
 	public function delete() {
 		if($r = $this->bucket()->get($this->_key)->delete()) {
@@ -246,7 +246,7 @@ class Document {
 	
 	/**
 	 * Reloads this document from the bucket
-	 * @return \Ripple\Document - Returns self
+	 * @return \\Ripple\\Document - Returns self
 	 */
 	public function reload() {
 		$bucket = $this->bucket();
@@ -256,7 +256,7 @@ class Document {
 	
 	/**
 	 * Clears properties and links on this document
-	 * @return \Ripple\Document - Returns self
+	 * @return \\Ripple\\Document - Returns self
 	 */
 	public function clear() {
 		$bucket = $this->bucket();
@@ -270,7 +270,7 @@ class Document {
 	/**
 	 * Reloads this document to another key
 	 * @param string $new_key 
-	 * @return \Ripple\Document - Returns self
+	 * @return \\Ripple\\Document - Returns self
 	 */
 	public function moveTo($new_key) {
 		return $this->delete()->setKey($new_key)->save();
@@ -281,7 +281,7 @@ class Document {
 	 * Also works with arrays of key => value pairs
 	 * @param mixed $k - string or array of $k => $v pairs
 	 * @param mixed $v - value or null
-	 * @return \Ripple\Document - Returns self
+	 * @return \\Ripple\\Document - Returns self
 	 */
 	public function set($k, $v = null) {
 		if(is_array($k)) {
@@ -298,7 +298,7 @@ class Document {
 	 * Adds a link from this Document to another Document
 	 * @param mixed $doc - Link or Document representing link destination
 	 * @param string $tag - Tag for link (ex: friend)
-	 * @return \Ripple\Document - Returns self
+	 * @return \\Ripple\\Document - Returns self
 	 */
 	public function addLink($doc, $tag = null) {
 		if($doc instanceof \RiakLink) {
@@ -315,7 +315,7 @@ class Document {
 	 * Used for one-to-one relationships 
 	 * @param mixed $doc - Link or Document representing link destination
 	 * @param string $tag - Tag for link (ex: friend)
-	 * @return \Ripple\Document - Returns self
+	 * @return \\Ripple\\Document - Returns self
 	 */
 	public function setLink($doc, $tag) {
 		if($doc instanceof \RiakLink) {
@@ -337,7 +337,7 @@ class Document {
 	 * Used for one-to-one relationships 
 	 * @param mixed $doc - Link or Document representing link destination
 	 * @param string $tag - Tag for link (ex: friend)
-	 * @return \Ripple\Document - Returns self
+	 * @return \\Ripple\\Document - Returns self
 	 */
 	public function removeLink($doc, $tag = null) {
 		if($doc instanceof \RiakLink) {

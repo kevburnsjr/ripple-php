@@ -25,7 +25,7 @@ class Collection implements \ArrayAccess, \Countable {
 	/**
 	 * Push some documents into the collection
 	 * @param mixed $documents - Document or array of Documents
-	 * @return \Ripple\Document\Collection - Return self
+	 * @return \\Ripple\\Document\\Collection - Return self
 	 */
 	public function push($documents) {
 		if($documents instanceof \Ripple\Document) {
@@ -40,7 +40,7 @@ class Collection implements \ArrayAccess, \Countable {
 	
 	/**
 	 * Save all documents in this collection
-	 * @return \Ripple\Document\Collection - Return self
+	 * @return \\Ripple\\Document\\Collection - Return self
 	 */
 	public function save() {
 		foreach($this->documents as $doc) {
@@ -51,7 +51,7 @@ class Collection implements \ArrayAccess, \Countable {
 	
 	/**
 	 * Save all documents in this collection
-	 * @return \Ripple\Document\Collection - Return self
+	 * @return \\Ripple\\Document\\Collection - Return self
 	 */
 	public function delete() {
 		foreach($this->documents as $doc) {
